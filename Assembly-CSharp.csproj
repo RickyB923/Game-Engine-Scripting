@@ -36,6 +36,8 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Target.cs" />
+     <Compile Include="Assets\Scripts\TargetWatcher.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity Hub/2021/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>

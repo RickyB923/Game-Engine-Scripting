@@ -10,12 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int playerJumpAmount = 2;
     [SerializeField] bool inAir;
     [SerializeField] bool isAttacking;
-
-    private Rigidbody rigidbody;
+    public int targetsDestroyed;
+    private Rigidbody rb;
 
     void Start()
     {   
-        rigidbody = this.GetComponent<Rigidbody>();
+        rb = this.GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -36,7 +36,7 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
         {
-            rigidbody.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
+            rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
             //transform.Translate(Vector3.up * Time.deltaTime * playerJumpSpeed);
             inAir = true;
             playerJumpAmount--;
