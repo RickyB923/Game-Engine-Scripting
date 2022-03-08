@@ -10,9 +10,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int playerJumpAmount = 2;
     [SerializeField] bool inAir;
     [SerializeField] bool isAttacking;
+
+    private Rigidbody rigidbody;
+
     void Start()
     {   
-        
+        rigidbody = this.GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -31,9 +34,10 @@ public class PlayerController : MonoBehaviour
         {
             transform.Translate(Vector3.right * Time.deltaTime * playerSpeed);
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount >= 1)
+        else if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
         {
-            transform.Translate(Vector3.up * Time.deltaTime * playerJumpSpeed);
+            rigidbody.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
+            //transform.Translate(Vector3.up * Time.deltaTime * playerJumpSpeed);
             inAir = true;
             playerJumpAmount--;
         }
@@ -51,7 +55,11 @@ public class PlayerController : MonoBehaviour
             inAir = false;
             playerJumpAmount = 2;
         }
-        else if(other.gameObject.CompareTag("target") && isAttacking == true)
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.CompareTag("target") && isAttacking == true)
         {
             Destroy(other.gameObject);
         }
