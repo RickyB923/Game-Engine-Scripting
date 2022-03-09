@@ -12,15 +12,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool isAttacking;
     public int targetsDestroyed;
     private Rigidbody rb;
+    [SerializeField] bool isFacingRight;
+    [SerializeField] GameObject attackRight;
+    [SerializeField] GameObject attackLeft;
 
     void Start()
     {   
+        targetsDestroyed = 0;
         rb = this.GetComponent<Rigidbody>();
+        attackRight.SetActive(false);
+        attackLeft.SetActive(false);
     }
 
     void Update()
     {
-        isAttacking = false;
         Move();
     }
 
@@ -29,26 +34,34 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKey(KeyCode.LeftArrow))
         {
             transform.Translate(Vector3.left * Time.deltaTime * playerSpeed);
+            isFacingRight = false;
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
             transform.Translate(Vector3.right * Time.deltaTime * playerSpeed);
+            isFacingRight = true;
         }
         else if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
         {
             rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
-            //transform.Translate(Vector3.up * Time.deltaTime * playerJumpSpeed);
             inAir = true;
             playerJumpAmount--;
         }
         else if (Input.GetKey(KeyCode.LeftShift))
         {
-            isAttacking = true;
+            if(isFacingRight)
+            {
+                StartCoroutine(AttackRight(0.5f));
+            }
+            else
+            {
+                StartCoroutine(AttackLeft(0.5f));
+            }
         }
         
     }
 
-    private void OnCollisionStay(Collision other)
+    private void OnCollisionEnter(Collision other)
     {
         if(other.gameObject.CompareTag("floor"))
         {
@@ -57,11 +70,21 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
+    IEnumerator AttackRight(float seconds)
     {
-        if(other.gameObject.CompareTag("target") && isAttacking == true)
-        {
-            Destroy(other.gameObject);
-        }
+        isAttacking = true;
+        attackRight.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        isAttacking = false;
+        attackRight.SetActive(false);
+    }
+
+    IEnumerator AttackLeft(float seconds)
+    {
+        isAttacking = true;
+        attackLeft.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        isAttacking = false;
+        attackLeft.SetActive(false);
     }
 }
