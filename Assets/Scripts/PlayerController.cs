@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float playerSpeed = 1f;
     [SerializeField] float playerJumpSpeed = 1f;
     [SerializeField] int playerJumpAmount = 2;
+    [SerializeField] float attackSpeed = 0.2f;
     [SerializeField] bool inAir;
     [SerializeField] bool isAttacking;
     public int targetsDestroyed;
@@ -47,15 +48,15 @@ public class PlayerController : MonoBehaviour
             inAir = true;
             playerJumpAmount--;
         }
-        else if (Input.GetKey(KeyCode.LeftShift))
+        else if (Input.GetKey(KeyCode.RightShift))
         {
-            if(isFacingRight)
+            if(!isFacingRight)
             {
-                StartCoroutine(AttackRight(0.5f));
+                StartCoroutine(AttackRight(attackSpeed));
             }
             else
             {
-                StartCoroutine(AttackLeft(0.5f));
+                StartCoroutine(AttackLeft(attackSpeed));
             }
         }
         
