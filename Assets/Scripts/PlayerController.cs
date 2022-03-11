@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int playerJumpAmount = 2;
     [SerializeField] float attackSpeed = 0.2f;
     [SerializeField] bool inAir;
+    [SerializeField] bool onWall;
     [SerializeField] bool isAttacking;
     public int targetsDestroyed;
     private Rigidbody rb;
@@ -68,6 +69,18 @@ public class PlayerController : MonoBehaviour
         {
             inAir = false;
             playerJumpAmount = 2;
+        }
+        if(other.gameObject.CompareTag("wall"))
+        {
+            onWall = true;
+        }
+    }
+
+    private void OnCollisionExit(Collision other)
+    {
+        if(other.gameObject.CompareTag("wall"))
+        {
+            onWall = false;
         }
     }
 
