@@ -38,18 +38,18 @@ public class PlayerController : MonoBehaviour
             transform.Translate(Vector3.left * Time.deltaTime * playerSpeed);
             isFacingRight = false;
         }
-        else if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow))
         {
             transform.Translate(Vector3.right * Time.deltaTime * playerSpeed);
             isFacingRight = true;
         }
-        else if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
+        if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
         {
             rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
             inAir = true;
             playerJumpAmount--;
         }
-        else if (Input.GetKey(KeyCode.RightShift))
+        if (Input.GetKey(KeyCode.RightShift))
         {
             if(!isFacingRight)
             {
