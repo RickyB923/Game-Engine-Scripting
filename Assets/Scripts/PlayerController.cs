@@ -19,11 +19,17 @@ public class PlayerController : MonoBehaviour
     public int targetsDestroyed;
     public Vector3 lastPosition;
     private Rigidbody rb;
+    private bool leftInput;
+    private bool rightInput;
+    private bool jumpInput;
+    private bool attackInput;
+    private bool canJump;
 
     void Start()
     {   
         // Initializes properties
         targetsDestroyed = 0;
+        canJump = true;
         rb = this.GetComponent<Rigidbody>();
         attackRight.SetActive(false);
         attackLeft.SetActive(false);
@@ -31,35 +37,50 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {  
-        var currentPosition = transform.position;
-        // Adds gravity every frame
-        rb.AddForce(Vector3.down * playerGravity, ForceMode.Acceleration);
-        Move();
         // Gets last known position
+        var currentPosition = transform.position;
+        MoveInput();
         lastPosition = currentPosition;
     }
+    void FixedUpdate()
+    {
+        rb.AddForce(Vector3.down * playerGravity, ForceMode.Acceleration);
+        Move();
+    }
 
+    void MoveInput()
+    {
+        leftInput = Input.GetKey(KeyCode.LeftArrow);
+        rightInput = Input.GetKey(KeyCode.RightArrow);
+        jumpInput = Input.GetKey(KeyCode.Space);
+        attackInput = Input.GetKey(KeyCode.RightShift);
+    }
     // Checks for various movements 
     public void Move()
     {
         // Basic set of input checks that determine left/right player movement and jumping
-        if(Input.GetKey(KeyCode.LeftArrow))
+        if(leftInput)
         {
-            transform.Translate(Vector3.left * Time.deltaTime * playerSpeed);
+            transform.Translate(Vector3.left * Time.fixedDeltaTime * playerSpeed);
             isFacingRight = false;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (rightInput)
         {
-            transform.Translate(Vector3.right * Time.deltaTime * playerSpeed);
+            transform.Translate(Vector3.right * Time.fixedDeltaTime * playerSpeed);
             isFacingRight = true;
         }
-        if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
+        if (jumpInput && playerJumpAmount != 0)
         {
-            
-            playerJumpAmount--;
+            if(canJump)
+            {
+                rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
+                canJump = false;
+                StartCoroutine(JumpDelay(0.2f));
+                playerJumpAmount--;
+            }
         }
         // Input check that determines attacking
-        if (Input.GetKey(KeyCode.RightShift))
+        if (attackInput)
         {
             if(!isFacingRight)
             {
@@ -75,16 +96,16 @@ public class PlayerController : MonoBehaviour
         {
             if(isFacingRight)
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                if(jumpInput && canJump)
                 {
-                    rb.AddForce((Vector3.up + Vector3.left) * playerJumpSpeed, ForceMode.Impulse);
+                    rb.AddForce((Vector3.up + Vector3.left) * (playerJumpSpeed * 0.5f), ForceMode.Impulse);
                 }
             }
             else
             {
-                if(Input.GetKeyDown(KeyCode.Space))
+                if(jumpInput && canJump)
                 {
-                    rb.AddForce((Vector3.up + Vector3.right) * playerJumpSpeed, ForceMode.Impulse);
+                    rb.AddForce((Vector3.up + Vector3.right) * (playerJumpSpeed * 0.5f), ForceMode.Impulse);
                 }
             }
         }
@@ -132,5 +153,11 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         isAttacking = false;
         attackLeft.SetActive(false);
+    }
+
+    IEnumerator JumpDelay(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        canJump = true;
     }
 }

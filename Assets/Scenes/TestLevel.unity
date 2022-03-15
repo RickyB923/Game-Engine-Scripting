@@ -1708,9 +1708,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerSpeed: 10
-  playerJumpSpeed: 10
+  playerJumpSpeed: 15
   playerJumpAmount: 2
-  playerGravity: 6
+  playerGravity: 15
   attackSpeed: 0.2
   inAir: 0
   onWall: 0
