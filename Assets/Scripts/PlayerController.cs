@@ -55,10 +55,6 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space) && playerJumpAmount != 0)
         {
-            while(Input.GetKey(KeyCode.Space))
-            {
-                rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
-            }
             
             playerJumpAmount--;
         }
