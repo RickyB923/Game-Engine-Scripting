@@ -19,7 +19,10 @@ public class TargetWatcher : MonoBehaviour
 
     IEnumerator LoadNextScene(float seconds)
     {
-        yield return new WaitForSeconds(seconds);
-        SceneManager.LoadScene(nextLevel);
+        if(nextLevel != "")
+        {
+            yield return new WaitForSeconds(seconds);
+            SceneManager.LoadScene(nextLevel);
+        }
     }
 }

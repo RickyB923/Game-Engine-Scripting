@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float playerSpeed = 1f;
     [SerializeField] float playerJumpSpeed = 1f;
     [SerializeField] int playerJumpAmount = 2;
+    [SerializeField] float playerJumpDelay = 0.3f;
     [SerializeField] int playerGravity;
     [SerializeField] float attackSpeed = 0.2f;
     [SerializeField] bool inAir;
@@ -19,10 +20,11 @@ public class PlayerController : MonoBehaviour
     public int targetsDestroyed;
     public Vector3 lastPosition;
     private Rigidbody rb;
-    private bool leftInput;
-    private bool rightInput;
-    private bool jumpInput;
-    private bool attackInput;
+    private float leftInput;
+    private float rightInput;
+    private float downInput;
+    private float jumpInput;
+    private float attackInput;
     private bool canJump;
 
     void Start()
@@ -39,7 +41,7 @@ public class PlayerController : MonoBehaviour
     {  
         // Gets last known position
         var currentPosition = transform.position;
-        MoveInput();
+        GetMoveInput();
         lastPosition = currentPosition;
     }
     void FixedUpdate()
@@ -48,39 +50,44 @@ public class PlayerController : MonoBehaviour
         Move();
     }
 
-    void MoveInput()
+    void GetMoveInput()
     {
-        leftInput = Input.GetKey(KeyCode.LeftArrow);
-        rightInput = Input.GetKey(KeyCode.RightArrow);
-        jumpInput = Input.GetKey(KeyCode.Space);
-        attackInput = Input.GetKey(KeyCode.RightShift);
+        leftInput = Input.GetAxis("Horizontal");
+        rightInput = Input.GetAxis("Horizontal");
+        downInput = Input.GetAxis("Vertical");
+        jumpInput = Input.GetAxis("Jump");
+        attackInput = Input.GetAxis("Attack");
     }
     // Checks for various movements 
     public void Move()
     {
         // Basic set of input checks that determine left/right player movement and jumping
-        if(leftInput)
+        if(leftInput == -1)
         {
             transform.Translate(Vector3.left * Time.fixedDeltaTime * playerSpeed);
             isFacingRight = false;
         }
-        if (rightInput)
+        if (rightInput == 1)
         {
             transform.Translate(Vector3.right * Time.fixedDeltaTime * playerSpeed);
             isFacingRight = true;
         }
-        if (jumpInput && playerJumpAmount != 0)
+        if (downInput == 1)
+        {
+            rb.AddForce(Vector3.down * 2, ForceMode.Impulse); 
+        }
+        if (jumpInput == 1 && playerJumpAmount != 0)
         {
             if(canJump)
             {
                 rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
                 canJump = false;
-                StartCoroutine(JumpDelay(0.2f));
+                StartCoroutine(JumpDelay(playerJumpDelay));
                 playerJumpAmount--;
             }
         }
         // Input check that determines attacking
-        if (attackInput)
+        if (attackInput == 1)
         {
             if(!isFacingRight)
             {
@@ -96,14 +103,14 @@ public class PlayerController : MonoBehaviour
         {
             if(isFacingRight)
             {
-                if(jumpInput && canJump)
+                if(jumpInput == 1 && canJump)
                 {
                     rb.AddForce((Vector3.up + Vector3.left) * (playerJumpSpeed * 0.5f), ForceMode.Impulse);
                 }
             }
             else
             {
-                if(jumpInput && canJump)
+                if(jumpInput == 1 && canJump)
                 {
                     rb.AddForce((Vector3.up + Vector3.right) * (playerJumpSpeed * 0.5f), ForceMode.Impulse);
                 }
