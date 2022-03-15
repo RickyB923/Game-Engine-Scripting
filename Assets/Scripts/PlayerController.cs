@@ -27,9 +27,8 @@ public class PlayerController : MonoBehaviour
     private float attackInput;
     private bool canJump;
 
-    void Start()
+    void Start() // Initializes properties
     {   
-        // Initializes properties
         targetsDestroyed = 0;
         canJump = true;
         rb = this.GetComponent<Rigidbody>();
@@ -37,20 +36,19 @@ public class PlayerController : MonoBehaviour
         attackLeft.SetActive(false);
     }
 
-    void Update()
+    void Update() // Gets last known position
     {  
-        // Gets last known position
         var currentPosition = transform.position;
         GetMoveInput();
         lastPosition = currentPosition;
     }
-    void FixedUpdate()
+    void FixedUpdate() // Adds gravity and moves player rigidbody
     {
         rb.AddForce(Vector3.down * playerGravity, ForceMode.Acceleration);
         Move();
     }
 
-    void GetMoveInput()
+    void GetMoveInput() //Checks for player input
     {
         leftInput = Input.GetAxis("Horizontal");
         rightInput = Input.GetAxis("Horizontal");
@@ -58,10 +56,9 @@ public class PlayerController : MonoBehaviour
         jumpInput = Input.GetAxis("Jump");
         attackInput = Input.GetAxis("Attack");
     }
-    // Checks for various movements 
-    public void Move()
+    public void Move() // Moves player rigidbody if the corresponding input is met
     {
-        // Basic set of input checks that determine left/right player movement and jumping
+        // Input check that determines left, right, down and jump movement
         if(leftInput == -1)
         {
             transform.Translate(Vector3.left * Time.fixedDeltaTime * playerSpeed);
@@ -117,7 +114,7 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionEnter(Collision other) // Checks for collision with floors and walls
     {
         if(other.gameObject.CompareTag("floor"))
         {
@@ -129,8 +126,7 @@ public class PlayerController : MonoBehaviour
             onWall = true;
         }
     }
-
-    private void OnCollisionExit(Collision other)
+    private void OnCollisionExit(Collision other) // Resets bools upon leaving collision
     {
         if(other.gameObject.CompareTag("floor"))
         {
@@ -141,9 +137,7 @@ public class PlayerController : MonoBehaviour
             onWall = false;
         }
     }
-
-    // Activates right attack
-    IEnumerator AttackRight(float seconds)
+    IEnumerator AttackRight(float seconds) // Activates right attack
     {
         isAttacking = true;
         attackRight.SetActive(true);
@@ -151,9 +145,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackRight.SetActive(false);
     }
-
-    // Activates left attack
-    IEnumerator AttackLeft(float seconds)
+    IEnumerator AttackLeft(float seconds) // Activates left attack
     {
         isAttacking = true;
         attackLeft.SetActive(true);
@@ -161,8 +153,7 @@ public class PlayerController : MonoBehaviour
         isAttacking = false;
         attackLeft.SetActive(false);
     }
-
-    IEnumerator JumpDelay(float seconds)
+    IEnumerator JumpDelay(float seconds) // Delays when the player can jump
     {
         yield return new WaitForSeconds(seconds);
         canJump = true;
