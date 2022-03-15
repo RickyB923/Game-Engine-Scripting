@@ -1158,7 +1158,7 @@ GameObject:
   - component: {fileID: 872304250}
   m_Layer: 0
   m_Name: Right Wall
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1682,7 +1682,7 @@ GameObject:
   - component: {fileID: 1307768347}
   m_Layer: 0
   m_Name: Left Wall
-  m_TagString: Untagged
+  m_TagString: wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2172,10 +2172,11 @@ MonoBehaviour:
   inAir: 0
   onWall: 0
   isAttacking: 0
-  targetsDestroyed: 0
   isFacingRight: 0
   attackRight: {fileID: 191417268}
   attackLeft: {fileID: 939812959}
+  targetsDestroyed: 0
+  lastPosition: {x: 0, y: 0, z: 0}
 --- !u!95 &1997167803
 Animator:
   serializedVersion: 3
