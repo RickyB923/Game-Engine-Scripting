@@ -5,11 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    [SerializeField] float playerSpeed = 1f;
-    [SerializeField] float playerJumpSpeed = 1f;
+    [SerializeField] float playerSpeed = 10f;
+    [SerializeField] float playerJumpSpeed = 15f;
     [SerializeField] int playerJumpAmount = 2;
     [SerializeField] float playerJumpDelay = 0.3f;
-    [SerializeField] int playerGravity;
+    [SerializeField] float playerWallJumpSpeed = 2f;
+    [SerializeField] float playerWallSpeed = 1f;
+    [SerializeField] float playerDropSpeed = 3f;
+    [SerializeField] float playerGravity = 15f;
     [SerializeField] float attackSpeed = 0.2f;
     [SerializeField] bool inAir;
     [SerializeField] bool onWall;
@@ -71,7 +74,7 @@ public class PlayerController : MonoBehaviour
         }
         if (downInput == 1)
         {
-            rb.AddForce(Vector3.down * 2, ForceMode.Impulse); 
+            rb.AddForce(Vector3.down * playerDropSpeed, ForceMode.Impulse); 
         }
         if (jumpInput == 1 && playerJumpAmount != 0)
         {
@@ -102,14 +105,16 @@ public class PlayerController : MonoBehaviour
             {
                 if(jumpInput == 1 && canJump)
                 {
-                    rb.AddForce((Vector3.up + Vector3.left) * (playerJumpSpeed * 0.5f), ForceMode.Impulse);
+                    rb.AddForce(Vector3.up * playerWallJumpSpeed, ForceMode.Impulse);
+                    rb.AddForce((Vector3.left * playerWallSpeed) * 0.3f, ForceMode.Impulse);
                 }
             }
             else
             {
                 if(jumpInput == 1 && canJump)
                 {
-                    rb.AddForce((Vector3.up + Vector3.right) * (playerJumpSpeed * 0.5f), ForceMode.Impulse);
+                    rb.AddForce(Vector3.up * playerWallJumpSpeed, ForceMode.Impulse);
+                    rb.AddForce((Vector3.right * playerWallSpeed) * 0.3f, ForceMode.Impulse);
                 }
             }
         }

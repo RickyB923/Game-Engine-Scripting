@@ -17,7 +17,6 @@ public class MovingPlatform : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Colision!");
             Move();
         }
     }
