@@ -9,6 +9,7 @@ public class Target : MonoBehaviour
     [SerializeField] bool moves;
     [SerializeField] Transform position1;
     [SerializeField] Transform position2;
+    private bool shouldMove;
 
     void Start()
     {
@@ -18,19 +19,21 @@ public class Target : MonoBehaviour
     {
         if(moves)
         {
-            if(transform.position != position2.position)
+            if(Vector3.Distance(transform.position, position1.position) == 0)
             {
-                transform.position = Vector3.MoveTowards(transform.position, position2.position, Time.deltaTime * speed);
-            }
-            else if(transform.position == position2.position)
-            {
-                transform.position = Vector3.MoveTowards(transform.position, position1.position, Time.deltaTime * speed);
-            }
+                Move(position2.position, position1.position);
+            } 
         }
     }
     void OnDestroy()
     {
         player.targetsDestroyed++;
+    }
+
+    void Move(Vector3 pos1, Vector3 pos2)
+    {       
+        float step = speed * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(pos1, pos2, step);
     }
 }
 
