@@ -9,31 +9,32 @@ public class Target : MonoBehaviour
     [SerializeField] bool moves;
     [SerializeField] Transform position1;
     [SerializeField] Transform position2;
-    private bool shouldMove;
-
-    void Start()
-    {
-        transform.position = position1.position;
-    }
+    private Vector3 currentTarget;
+    private int moveDirection = -1;
     void Update()
     {
         if(moves)
         {
-            if(Vector3.Distance(transform.position, position1.position) == 0)
+            if(moveDirection == 1)
             {
-                Move(position2.position, position1.position);
-            } 
+                currentTarget = position1.position;
+            }
+            else if(moveDirection == -1)
+            {
+                currentTarget = position2.position;
+            }
+
+            transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+
+            if(Vector3.Distance(transform.position, currentTarget) == 0f)
+            {
+                moveDirection *= -1;
+            }
         }
     }
     void OnDestroy()
     {
         player.targetsDestroyed++;
-    }
-
-    void Move(Vector3 pos1, Vector3 pos2)
-    {       
-        float step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(pos1, pos2, step);
     }
 }
 

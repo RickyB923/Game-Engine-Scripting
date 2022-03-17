@@ -19,12 +19,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] bool isAttacking;
     [SerializeField] bool isFacingRight;
     [SerializeField] GameObject attackRight;
-    [SerializeField] GameObject attackLeft;    
+    [SerializeField] GameObject attackLeft;
+    [SerializeField] GameObject attackUp;   
     public int targetsDestroyed;
     public Vector3 lastPosition;
     private Rigidbody rb;
     private float leftInput;
     private float rightInput;
+    private float upInput;
     private float downInput;
     private float jumpInput;
     private float attackInput;
@@ -56,6 +58,7 @@ public class PlayerController : MonoBehaviour
         leftInput = Input.GetAxis("Horizontal");
         rightInput = Input.GetAxis("Horizontal");
         downInput = Input.GetAxis("Vertical");
+        upInput = Input.GetAxis("Vertical");
         jumpInput = Input.GetAxis("Jump");
         attackInput = Input.GetAxis("Attack");
     }
@@ -78,7 +81,7 @@ public class PlayerController : MonoBehaviour
         }
         if (jumpInput == 1 && playerJumpAmount != 0)
         {
-            if(canJump)
+            if (canJump)
             {
                 rb.AddForce(Vector3.up * playerJumpSpeed, ForceMode.Impulse);
                 canJump = false;
@@ -89,11 +92,15 @@ public class PlayerController : MonoBehaviour
         // Input check that determines attacking
         if (attackInput == 1)
         {
-            if(!isFacingRight)
+            if (upInput ==  -1)
+            {
+                StartCoroutine(AttackUp(attackSpeed));
+            }
+            else if (rightInput == -1 || !isFacingRight)
             {
                 StartCoroutine(AttackRight(attackSpeed));
             }
-            else
+            else if (leftInput == 1 || isFacingRight)
             {
                 StartCoroutine(AttackLeft(attackSpeed));
             }
@@ -144,19 +151,21 @@ public class PlayerController : MonoBehaviour
     }
     IEnumerator AttackRight(float seconds) // Activates right attack
     {
-        isAttacking = true;
         attackRight.SetActive(true);
         yield return new WaitForSeconds(seconds);
-        isAttacking = false;
         attackRight.SetActive(false);
     }
     IEnumerator AttackLeft(float seconds) // Activates left attack
     {
-        isAttacking = true;
         attackLeft.SetActive(true);
         yield return new WaitForSeconds(seconds);
-        isAttacking = false;
         attackLeft.SetActive(false);
+    }
+    IEnumerator AttackUp(float seconds) // Activates up attack
+    {
+        attackUp.SetActive(true);
+        yield return new WaitForSeconds(seconds);
+        attackUp.SetActive(false);
     }
     IEnumerator JumpDelay(float seconds) // Delays when the player can jump
     {

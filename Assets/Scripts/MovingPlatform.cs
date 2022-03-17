@@ -4,26 +4,31 @@ using UnityEngine;
 
 public class MovingPlatform : MonoBehaviour
 {
-    [SerializeField] public float speed;
-    [SerializeField] public Transform position1;
-    [SerializeField] public Transform position2;
-
-    void Start()
+    [SerializeField] private float speed;
+    [SerializeField] bool moves;
+    [SerializeField] Transform position1;
+    [SerializeField] Transform position2;
+    private Vector3 currentTarget;
+    private int moveDirection = -1;
+    void Update()
     {
-        
-    }
-
-    void OnCollisionEnter(Collision other)
-    {
-        if(other.gameObject.CompareTag("Player"))
+        if(moves)
         {
-            Move();
-        }
-    }
+            if(moveDirection == 1)
+            {
+                currentTarget = position1.position;
+            }
+            else if(moveDirection == -1)
+            {
+                currentTarget = position2.position;
+            }
 
-    void Move()
-    {
-        float step = speed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, position2.position, step);
+            transform.position = Vector3.MoveTowards(transform.position, currentTarget, speed * Time.deltaTime);
+
+            if(Vector3.Distance(transform.position, currentTarget) == 0f)
+            {
+                moveDirection *= -1;
+            }
+        }
     }
 }
