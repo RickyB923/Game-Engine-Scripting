@@ -9,7 +9,7 @@ public class TargetWatcher : MonoBehaviour
     [SerializeField] Target[] targets;
     [SerializeField] public string nextLevel;
 
-    void Update()
+    void Update() // Loads next scene if all targets are destroyed
     {
         if(targets.Length == player.targetsDestroyed)
         {
@@ -17,7 +17,7 @@ public class TargetWatcher : MonoBehaviour
         }
     }
 
-    IEnumerator LoadNextScene(float seconds)
+    IEnumerator LoadNextScene(float seconds) // Loads next scene
     {
         Debug.Log("Complete!");
         if(nextLevel != "")

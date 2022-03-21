@@ -10,7 +10,7 @@ public class MovingPlatform : MonoBehaviour
     [SerializeField] Transform position2;
     private Vector3 currentTarget;
     private int moveDirection = -1;
-    void Update()
+    void Update() // Moves platform between two transforms
     {
         if(moves)
         {

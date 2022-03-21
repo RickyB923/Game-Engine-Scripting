@@ -11,7 +11,7 @@ public class Target : MonoBehaviour
     [SerializeField] Transform position2;
     private Vector3 currentTarget;
     private int moveDirection = -1;
-    void Update()
+    void Update() // Moves target between two transforms
     {
         if(moves)
         {
@@ -32,11 +32,8 @@ public class Target : MonoBehaviour
             }
         }
     }
-    void OnDestroy()
+    void OnDestroy() // Adds to the number or targets the player has destroyed
     {
         player.targetsDestroyed++;
     }
 }
-
-// Tring to get targets to move in between two points
-// currently targets no longer get destoryed by player

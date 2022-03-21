@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Attack : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other) // Destroys the target upon collision
     {
         if(other.gameObject.CompareTag("target"))
         {
